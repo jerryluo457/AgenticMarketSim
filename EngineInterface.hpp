@@ -19,6 +19,8 @@ struct UserOrder {
     bool is_buy; int quantity; double price;
 };
 
+enum class MarketScenario { NORMAL = 0, PUMP_DUMP = 1, SHORT_SQUEEZE = 2 };
+
 struct AgentStats {
     long buy_vol = 0; long sell_vol = 0;
     void add(bool is_buy, int qty) { if (is_buy) buy_vol += qty; else sell_vol += qty; }
@@ -57,20 +59,26 @@ public:
         }
     }
 
-    bool checkCommands(std::vector<UserOrder>& new_orders) {
+    int checkCommands(std::vector<UserOrder>& new_orders) {
+        int scenario_signal = -1;
         while (true) {
             zmq::message_t msg;
             if (!command_sub.recv(msg, zmq::recv_flags::dontwait)) {
                 if (is_paused) { std::this_thread::sleep_for(std::chrono::milliseconds(50)); continue; }
-                return true; 
+                return scenario_signal; 
             }
             std::string s(static_cast<char*>(msg.data()), msg.size());
             std::stringstream ss(s); std::string cmd; ss >> cmd;
 
-            if (cmd == "STOP") return false; 
+            if (cmd == "STOP") return -2; 
             if (cmd == "PAUSE") is_paused = true;
             if (cmd == "RESUME") is_paused = false;
             
+            if (cmd == "SCENARIO") {
+                int type; ss >> type;
+                scenario_signal = type;
+            }
+
             if (cmd == "ORDER") {
                 int side, qty; double price; ss >> side >> qty >> price;
                 new_orders.push_back({side == 0, qty, price});
@@ -92,6 +100,19 @@ public:
     void broadcastSentiment(long fb, long fs, long mb, long ms, long mkb, long mks, long nb, long ns, long ub, long us) {
         std::stringstream ss;
         ss << "SENTIMENT " << fb << " " << fs << " " << mb << " " << ms << " " << mkb << " " << mks << " " << nb << " " << ns << " " << ub << " " << us;
+        std::string s = ss.str(); zmq::message_t m(s.data(), s.size()); publisher.send(m, zmq::send_flags::none);
+    }
+
+    void broadcastScenarioMetrics(double hype, double bubble, long short_interest, double panic) {
+        std::stringstream ss;
+        ss << "SCENARIO_METRICS " << hype << " " << bubble << " " << short_interest << " " << panic;
+        std::string s = ss.str(); zmq::message_t m(s.data(), s.size()); publisher.send(m, zmq::send_flags::none);
+    }
+
+    // ADDED: Missing function that caused the error
+    void broadcastMetrics(double spread, long liquidity) {
+        std::stringstream ss;
+        ss << "METRICS " << spread << " " << liquidity;
         std::string s = ss.str(); zmq::message_t m(s.data(), s.size()); publisher.send(m, zmq::send_flags::none);
     }
 };

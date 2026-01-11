@@ -44,6 +44,16 @@ async def zmq_data_listener():
             elif parts[0] == "SENTIMENT":
                 data = [int(x) for x in parts[1:]]
                 await sio.emit('server_sentiment', data)
+            elif parts[0] == "SCENARIO_METRICS":
+                await sio.emit('scenario_metrics', {
+                    'hype': float(parts[1]),
+                    'bubble': float(parts[2]),
+                    'short_interest': int(parts[3]),
+                    'panic': float(parts[4])
+                })
+            # ADDED: Handler for General Metrics
+            elif parts[0] == "METRICS":
+                await sio.emit('market_metrics', {'spread': float(parts[1]), 'liquidity': int(parts[2])})
                 
         except asyncio.CancelledError:
             break
@@ -119,6 +129,12 @@ async def place_order(sid, data):
     side_int = 0 if data['side'] == 'buy' else 1
     cmd = f"ORDER {side_int} {int(data['quantity'])} {float(data['price'])}"
     await async_send_command(cmd)
+
+@sio.on('set_scenario')
+async def set_scenario(sid, data):
+    scenario_map = {'normal': 0, 'pump': 1, 'squeeze': 2}
+    val = scenario_map.get(data.get('type', 'normal'), 0)
+    await async_send_command(f"SCENARIO {val}")
 
 if __name__ == "__main__":
     import uvicorn

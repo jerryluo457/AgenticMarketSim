@@ -12,39 +12,74 @@
     <style>
         body { background-color: #020617; color: #e2e8f0; font-family: 'Inter', sans-serif; overflow: hidden; }
         .input-dark { background-color: #0f172a; border: 1px solid #334155; color: white; padding: 0.5rem; border-radius: 0.375rem; text-align: center; }
+        
         .term-line { font-family: 'Courier New', monospace; font-size: 0.85rem; border-bottom: 1px solid #1e293b; padding: 4px 6px; display: flex; justify-content: space-between; }
         .user-buy { color: #22c55e !important; font-weight: bold; border-left: 3px solid #22c55e; padding-left: 8px; }
         .user-sell { color: #ef4444 !important; font-weight: bold; border-left: 3px solid #ef4444; padding-left: 8px; }
+
         .sent-card { padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; color: black; transition: background-color 0.5s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
         .sent-title { font-size: 0.7rem; text-transform: uppercase; opacity: 0.8; margin-bottom: 2px; }
         .sent-val { font-size: 1.1rem; }
         .sent-net { font-size: 0.85rem; margin-top: 2px; }
-        .info-icon { cursor: pointer; color: #94a3b8; margin-left: 6px; font-size: 0.8rem; border: 1px solid #334155; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
+
+        .info-icon { 
+            cursor: pointer; color: #94a3b8; margin-left: 6px; font-size: 0.8rem; 
+            border: 1px solid #334155; border-radius: 50%; width: 16px; height: 16px; 
+            display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;
+            pointer-events: auto; /* Ensure it captures events even inside buttons */
+        }
         .info-icon:hover { color: #fff; border-color: #fff; background: #334155; }
+
         .whale-slider { -webkit-appearance: none; appearance: none; background: #334155; height: 6px; border-radius: 3px; outline: none; opacity: 0.9; transition: opacity .2s; }
         .whale-slider:hover { opacity: 1; }
         .whale-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; background: #facc15; cursor: pointer; border-radius: 50%; border: 2px solid #000; box-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
-        #agent-popup { position: absolute; background: #1e293b; border: 1px solid #475569; padding: 12px; border-radius: 8px; width: 250px; z-index: 50; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); font-size: 0.8rem; line-height: 1.4; display: none; pointer-events: none; }
+
+        #agent-popup {
+            position: absolute; background: #1e293b; border: 1px solid #475569; padding: 12px;
+            border-radius: 8px; width: 250px; z-index: 50; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            font-size: 0.8rem; line-height: 1.4; display: none; pointer-events: none;
+        }
         #agent-popup h3 { color: #facc15; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; font-size: 0.75rem; }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     </style>
 </head>
 <body class="h-screen flex flex-col">
-    <div id="agent-popup"><h3 id="popup-title">Title</h3><p id="popup-desc" class="text-slate-300">Description.</p></div>
+
+    <div id="agent-popup">
+        <h3 id="popup-title">Title</h3>
+        <p id="popup-desc" class="text-slate-300">Description.</p>
+    </div>
+
     <header class="bg-slate-900 border-b border-slate-700 p-3 flex justify-between items-center z-10 h-14 shrink-0">
-        <div class="flex items-center gap-3"><div class="w-3 h-3 rounded-full bg-red-500" id="status-dot"></div><h1 class="text-lg font-bold tracking-tight text-slate-100">Agentic Market Simulator</h1></div>
-        <div class="text-sm text-slate-400 flex gap-6"><span>Price: <span id="header-price" class="font-mono text-white text-xl font-bold">$0.00</span></span><span>Shares: <span id="user-shares" class="font-mono text-blue-400 text-xl font-bold">0</span></span><span>P/L: <span id="user-pl" class="font-mono text-white text-xl font-bold">$0.00</span></span></div>
+        <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-red-500" id="status-dot"></div>
+            <h1 class="text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2">
+                Agentic Market Simulator 
+                <span class="text-[10px] text-slate-500 font-normal mt-1">by Jerry Luo</span>
+            </h1>
+            <a href="https://github.com/jerryluo457/AgenticMarketSim" target="_blank" class="text-[10px] text-blue-500 hover:text-blue-400 underline ml-2 transition">Github</a>
+        </div>
+        <div class="text-sm text-slate-400 flex gap-6">
+            <span>Price: <span id="header-price" class="font-mono text-white text-xl font-bold">$0.00</span></span>
+            <span>Shares: <span id="user-shares" class="font-mono text-blue-400 text-xl font-bold">0</span></span>
+            <span>P/L: <span id="user-pl" class="font-mono text-white text-xl font-bold">$0.00</span></span>
+        </div>
     </header>
+
     <div class="flex-1 flex overflow-hidden">
+        
         <aside class="w-64 bg-slate-900 border-r border-slate-700 flex flex-col p-4 gap-4 shrink-0 z-10 overflow-y-auto">
             <h2 class="text-xs uppercase font-semibold text-slate-500 tracking-wider">Config</h2>
+            
             <select id="volatility-mode" class="input-dark w-full text-sm">
                 <option value="moderate">Moderate (Beta)</option>
                 <option value="volatile">Volatile (Beta)</option>
                 <option value="very_volatile" selected>Very Volatile</option>
                 <option value="most_volatile">Most Volatile</option>
             </select>
+            
             <div class="space-y-4 border-b border-slate-700 pb-4">
                 <div><div class="flex justify-between items-center text-xs text-slate-500"><div class="flex items-center">Makers<span class="info-icon" onmouseenter="showPopup(this, 'makers')" onmouseleave="hidePopup()">?</span></div><span id="val-makers" class="text-white">200</span></div><input type="range" id="input-makers" min="0" max="500" value="200" class="w-full h-1 bg-slate-700 rounded mt-1"></div>
                 <div><div class="flex justify-between items-center text-xs text-slate-500"><div class="flex items-center">Fundamental<span class="info-icon" onmouseenter="showPopup(this, 'fundamental')" onmouseleave="hidePopup()">?</span></div><span id="val-fundamental" class="text-white">200</span></div><input type="range" id="input-fundamental" min="0" max="500" value="200" class="w-full h-1 bg-slate-700 rounded mt-1"></div>
@@ -52,6 +87,53 @@
                 <div><div class="flex justify-between items-center text-xs text-slate-500"><div class="flex items-center">Noise<span class="info-icon" onmouseenter="showPopup(this, 'noise')" onmouseleave="hidePopup()">?</span></div><span id="val-noise" class="text-white">350</span></div><input type="range" id="input-noise" min="0" max="1000" value="350" class="w-full h-1 bg-slate-700 rounded mt-1"></div>
             </div>
             
+            <div id="market-scenarios" class="space-y-2 mb-4 border-b border-slate-700 pb-4 hidden">
+                <h3 class="text-xs uppercase font-bold text-blue-400">Market Scenarios</h3>
+                <div class="grid grid-cols-3 gap-1">
+                    <button onclick="setScenario('normal')" id="btn-normal" class="bg-blue-600 hover:bg-slate-600 text-white text-[10px] font-bold py-1.5 rounded transition border border-blue-400 shadow-[0_0_10px_rgba(37,99,235,0.5)] active-scenario" data-type="normal">Normal</button>
+                    
+                    <button onclick="setScenario('pump')" id="btn-pump" class="flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold py-1.5 rounded transition border border-slate-600 group" data-type="pump">
+                        Pump
+                        <span class="info-icon ml-1 w-3 h-3 text-[8px] border-none bg-slate-600 text-slate-300 group-hover:text-white" onmouseenter="showPopup(this, 'pump_dump')" onmouseleave="hidePopup()">?</span>
+                    </button>
+                    
+                    <button onclick="setScenario('squeeze')" id="btn-squeeze" class="flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-white text-[10px] font-bold py-1.5 rounded transition border border-slate-600 group" data-type="squeeze">
+                        Squeeze
+                        <span class="info-icon ml-1 w-3 h-3 text-[8px] border-none bg-slate-600 text-slate-300 group-hover:text-white" onmouseenter="showPopup(this, 'short_squeeze')" onmouseleave="hidePopup()">?</span>
+                    </button>
+                </div>
+                
+                <div id="scenario-indicators" class="mt-2 bg-slate-800 rounded p-2 border border-slate-600 hidden">
+                    <div id="metrics-pump" class="hidden">
+                        <div class="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+                            <div class="flex items-center">HYPE LEVEL<span class="info-icon" onmouseenter="showPopup(this, 'hype_level')" onmouseleave="hidePopup()">?</span></div>
+                            <span id="val-hype" class="text-green-400 font-bold">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden mb-2"><div id="bar-hype" class="bg-green-500 h-full w-0 transition-all duration-300"></div></div>
+                        <div class="flex justify-between items-center text-[10px] text-slate-400">
+                            <div class="flex items-center">OVERVALUED<span class="info-icon" onmouseenter="showPopup(this, 'overvalued')" onmouseleave="hidePopup()">?</span></div>
+                            <span id="val-bubble" class="text-red-400 font-bold">0%</span>
+                        </div>
+                    </div>
+                    <div id="metrics-squeeze" class="hidden">
+                        <div class="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+                            <div class="flex items-center">PANIC METER<span class="info-icon" onmouseenter="showPopup(this, 'panic_meter')" onmouseleave="hidePopup()">?</span></div>
+                            <span id="val-panic" class="text-red-500 font-bold animate-pulse">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden mb-2"><div id="bar-panic" class="bg-red-600 h-full w-0 transition-all duration-300"></div></div>
+                        <div class="flex justify-between items-center text-[10px] text-slate-400">
+                            <div class="flex items-center">SHORT INTEREST<span class="info-icon" onmouseenter="showPopup(this, 'short_interest')" onmouseleave="hidePopup()">?</span></div>
+                            <span id="val-short" class="text-white font-mono">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="liq-metrics" class="flex justify-between px-2 mb-2 text-[10px] text-slate-500 font-mono hidden">
+                <div>SPREAD: <span id="val-spread" class="text-slate-300">0.00</span></div>
+                <div>LIQ: <span id="val-liq" class="text-slate-300">0</span></div>
+            </div>
+
             <div id="scam-tools" class="hidden space-y-3 mt-auto">
                 <div class="flex justify-between items-center"><h3 class="text-xs uppercase font-bold text-yellow-500">Whale Tools</h3><span id="whale-label" class="text-[10px] font-mono font-bold text-slate-300 bg-slate-800 px-2 py-0.5 rounded">0% (Neutral)</span></div>
                 <div class="relative"><input type="range" id="whale-slider" min="-100" max="100" value="0" class="w-full whale-slider cursor-pointer"><div class="absolute top-4 left-0 text-[9px] text-slate-500">-100%</div><div class="absolute top-4 right-0 text-[9px] text-slate-500">+100%</div><div class="absolute top-4 left-1/2 -translate-x-1/2 text-[9px] text-slate-500">0</div></div>
@@ -63,6 +145,7 @@
                 <div id="paused-controls" class="hidden flex gap-2"><button onclick="resumeSim()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded">Continue</button><button onclick="stopSim()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded">Cancel</button></div>
             </div>
         </aside>
+        
         <main class="flex-1 flex flex-col bg-[#020617] relative border-r border-slate-800">
             <div id="main-chart" class="flex-1 w-full relative"></div>
             <div class="h-16 bg-slate-900 border-t border-slate-700 p-2 flex gap-4 items-center justify-center shrink-0 shadow-[0_-5px_15px_rgba(0,0,0,0.3)] z-20">
@@ -73,23 +156,34 @@
                 <button onclick="placeOrder('sell')" class="bg-red-600 hover:bg-red-500 text-white px-8 py-2 rounded font-bold text-lg shadow-lg shadow-red-900/50 transition transform active:scale-95">SELL</button>
             </div>
         </main>
+        
         <div class="w-80 bg-slate-900 flex flex-col shrink-0">
             <div class="flex-1 flex flex-col overflow-hidden border-b border-slate-700">
                 <div class="p-3 bg-slate-800 text-xs font-bold text-slate-400 uppercase tracking-wide flex justify-between"><span>Your Trades</span><span class="text-slate-600 text-[10px] self-center">LIVE</span></div>
                 <div id="terminal-output" class="flex-1 overflow-y-auto bg-slate-950 p-2 space-y-1"><div class="text-center text-slate-600 text-xs italic mt-4">Waiting for your orders...</div></div>
             </div>
             <div class="h-72 bg-slate-900 p-3 flex flex-col gap-2 shrink-0">
-                <div class="text-xs font-bold text-slate-400 uppercase mb-1">Last Second Sentiment</div>
+                <div class="text-xs font-bold text-slate-400 uppercase mb-1 flex items-center">
+                    Last Second Sentiment
+                    <span class="info-icon" onmouseenter="showPopup(this, 'sentiment')" onmouseleave="hidePopup()">?</span>
+                </div>
                 <div class="grid grid-cols-2 gap-2 flex-1">
                     <div id="card-fund" class="sent-card bg-slate-700"><div class="sent-title">Fundamental</div><div class="sent-val">--</div><div class="sent-net">--</div></div>
                     <div id="card-mom" class="sent-card bg-slate-700"><div class="sent-title">Momentum</div><div class="sent-val">--</div><div class="sent-net">--</div></div>
                     <div id="card-make" class="sent-card bg-slate-700"><div class="sent-title">Makers</div><div class="sent-val">--</div><div class="sent-net">--</div></div>
                     <div id="card-noise" class="sent-card bg-slate-700"><div class="sent-title">Noise</div><div class="sent-val">--</div><div class="sent-net">--</div></div>
                 </div>
-                <div class="bg-slate-800 rounded p-2 flex justify-between items-center mt-1 border border-slate-700 shadow-inner"><span class="text-xs text-slate-400 font-bold uppercase">Net Flow</span><span id="total-net-flow" class="text-lg font-mono font-bold text-white">0</span></div>
+                <div class="bg-slate-800 rounded p-2 flex justify-between items-center mt-1 border border-slate-700 shadow-inner">
+                    <span class="text-xs text-slate-400 font-bold uppercase flex items-center">
+                        Net Flow
+                        <span class="info-icon" onmouseenter="showPopup(this, 'net_flow')" onmouseleave="hidePopup()">?</span>
+                    </span>
+                    <span id="total-net-flow" class="text-lg font-mono font-bold text-white">0</span>
+                </div>
             </div>
         </div>
     </div>
+    
     <script>
         const socket = io();
         let isRunning = false; let currentPrice = 100.0; let currentTickVolume = 100; let lastPrice = 100.0; let userShares = 0; let userCash = 0; 
@@ -102,21 +196,105 @@
         socket.on('market_data', (d) => { currentPrice = d.price; currentTickVolume = d.volume > 0 ? d.volume : currentTickVolume; document.getElementById('header-price').innerText = `$${d.price.toFixed(2)}`; if (document.activeElement.id !== 'trade-price') document.getElementById('trade-price').value = d.price.toFixed(2); baseTime += 1; const volColor = d.price >= lastPrice ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'; lastPrice = d.price; areaSeries.update({ time: baseTime, value: d.price }); volSeries.update({ time: baseTime, value: d.volume, color: volColor }); updatePortfolioUI(); });
         socket.on('trade_log', (d) => { if(d.agent === 'USER') { const cost = d.qty * d.price; if (d.side === 'BUY') { userShares += d.qty; userCash -= cost; } else { userShares -= d.qty; userCash += cost; } updatePortfolioUI(); const term = document.getElementById('terminal-output'); if(term.children.length === 1 && term.children[0].innerText.includes("Waiting")) term.innerHTML = ''; const row = document.createElement('div'); row.className = 'term-line'; row.innerHTML = `<span class="${d.side === 'BUY' ? 'user-buy' : 'user-sell'}">YOU ${d.side}</span><span class="text-white">${d.qty} @ $${d.price.toFixed(2)}</span>`; term.appendChild(row); term.scrollTop = term.scrollHeight; } });
         function updatePortfolioUI() { const nlv = userCash + (userShares * currentPrice); document.getElementById('user-shares').innerText = userShares.toLocaleString(); const plEl = document.getElementById('user-pl'); plEl.innerText = (nlv >= 0 ? '+' : '') + `$${nlv.toFixed(2)}`; plEl.className = nlv >= 0 ? "font-mono text-green-400 text-xl font-bold" : "font-mono text-red-400 text-xl font-bold"; }
-        function startSim() { areaSeries.setData([]); volSeries.setData([]); userShares = 0; userCash = 0; updatePortfolioUI(); document.getElementById('terminal-output').innerHTML = '<div class="text-center text-slate-600 text-xs italic mt-4">Waiting for your orders...</div>'; socket.emit('start_simulation', { mode: document.getElementById('volatility-mode').value, makers: parseInt(document.getElementById('input-makers').value), fundamental: parseInt(document.getElementById('input-fundamental').value), momentum: parseInt(document.getElementById('input-momentum').value), noise: parseInt(document.getElementById('input-noise').value), }); document.getElementById('btn-start').classList.add('hidden'); document.getElementById('btn-pause').classList.remove('hidden'); document.getElementById('status-dot').className = "w-3 h-3 rounded-full bg-green-500 animate-pulse"; isRunning = true; }
+        
+        function startSim() { 
+            areaSeries.setData([]); volSeries.setData([]); userShares = 0; userCash = 0; updatePortfolioUI(); 
+            document.getElementById('terminal-output').innerHTML = '<div class="text-center text-slate-600 text-xs italic mt-4">Waiting for your orders...</div>'; 
+            socket.emit('start_simulation', { mode: document.getElementById('volatility-mode').value, makers: parseInt(document.getElementById('input-makers').value), fundamental: parseInt(document.getElementById('input-fundamental').value), momentum: parseInt(document.getElementById('input-momentum').value), noise: parseInt(document.getElementById('input-noise').value), }); 
+            setTimeout(() => { const activeBtn = document.querySelector('#market-scenarios button.bg-blue-600'); if (activeBtn) { const type = activeBtn.getAttribute('data-type'); socket.emit('set_scenario', { type: type }); } }, 1000);
+            document.getElementById('btn-start').classList.add('hidden'); document.getElementById('btn-pause').classList.remove('hidden'); document.getElementById('status-dot').className = "w-3 h-3 rounded-full bg-green-500 animate-pulse"; isRunning = true; 
+        }
         function pauseSim() { socket.emit('pause_simulation'); document.getElementById('btn-pause').classList.add('hidden'); document.getElementById('paused-controls').classList.remove('hidden'); document.getElementById('status-dot').className = "w-3 h-3 rounded-full bg-yellow-500"; }
         function resumeSim() { socket.emit('resume_simulation'); document.getElementById('paused-controls').classList.add('hidden'); document.getElementById('btn-pause').classList.remove('hidden'); document.getElementById('status-dot').className = "w-3 h-3 rounded-full bg-green-500 animate-pulse"; }
         function stopSim() { socket.emit('stop_simulation'); document.getElementById('paused-controls').classList.add('hidden'); document.getElementById('btn-start').classList.remove('hidden'); document.getElementById('status-dot').className = "w-3 h-3 rounded-full bg-red-500"; isRunning=false; }
         function placeOrder(side, qty=null, price=null) { if(!isRunning) return alert("Start Sim"); let p = price ? parseFloat(price) : parseFloat(document.getElementById('trade-price').value); const q = qty ? parseInt(qty) : parseInt(document.getElementById('trade-qty').value); if (side === 'buy') p = p * 1.005; else p = p * 0.995; socket.emit('place_order', { side, quantity: q, price: p.toFixed(2) }); }
+        
+        function setScenario(type) {
+            socket.emit('set_scenario', { type: type });
+            const container = document.getElementById('scenario-indicators');
+            const p = document.getElementById('metrics-pump');
+            const s = document.getElementById('metrics-squeeze');
+            ['normal', 'pump', 'squeeze'].forEach(t => { const btn = document.getElementById(`btn-${t}`); if (t === type) { btn.classList.remove('bg-slate-700', 'border-slate-600'); btn.classList.add('bg-blue-600', 'border-blue-400', 'shadow-[0_0_10px_rgba(37,99,235,0.5)]'); } else { btn.classList.add('bg-slate-700', 'border-slate-600'); btn.classList.remove('bg-blue-600', 'border-blue-400', 'shadow-[0_0_10px_rgba(37,99,235,0.5)]'); } });
+            if (type === 'normal') { container.classList.add('hidden'); } else { container.classList.remove('hidden'); if (type === 'pump') { p.classList.remove('hidden'); s.classList.add('hidden'); } else { s.classList.remove('hidden'); p.classList.add('hidden'); } }
+        }
+
         const whaleSlider = document.getElementById('whale-slider'); const whaleLabel = document.getElementById('whale-label');
         whaleSlider.addEventListener('input', (e) => { const val = parseInt(e.target.value); if (val === 0) { whaleLabel.innerText = "0% (Neutral)"; whaleLabel.className = "text-[10px] font-mono font-bold text-slate-300 bg-slate-800 px-2 py-0.5 rounded"; } else if (val > 0) { whaleLabel.innerText = `PUMP ${val}% Vol`; whaleLabel.className = "text-[10px] font-mono font-bold text-green-400 bg-green-900/30 px-2 py-0.5 rounded"; } else { whaleLabel.innerText = `SHORT ${Math.abs(val)}% Vol`; whaleLabel.className = "text-[10px] font-mono font-bold text-red-400 bg-red-900/30 px-2 py-0.5 rounded"; } });
         function executeWhale() { if(!isRunning) return; const pct = parseInt(whaleSlider.value); if (pct === 0) return; const qty = Math.max(10, Math.floor(currentTickVolume * (Math.abs(pct) / 100))); const side = pct > 0 ? 'buy' : 'sell'; const p = pct > 0 ? currentPrice * 1.05 : currentPrice * 0.95; placeOrder(side, qty, p.toFixed(2)); }
         function liquidate() { if(!isRunning) return; if (userShares === 0) return alert("No position."); const side = userShares > 0 ? 'sell' : 'buy'; const qty = Math.abs(userShares); const p = userShares > 0 ? currentPrice * 0.90 : currentPrice * 1.10; placeOrder(side, qty, p.toFixed(2)); }
-        const popup = document.getElementById('agent-popup'); const popupTitle = document.getElementById('popup-title'); const popupDesc = document.getElementById('popup-desc'); const definitions = { 'makers': {'moderate': "Provide liquidity with tight spreads.", 'volatile': "Standard liquidity.", 'very_volatile': "High-frequency agents.", 'most_volatile': "High-frequency agents."}, 'fundamental': {'moderate': "Value investors.", 'volatile': "Standard investors.", 'very_volatile': "Aggressive takers.", 'most_volatile': "Aggressive takers."}, 'momentum': {'moderate': "Scalpers.", 'volatile': "Trend followers.", 'very_volatile': "Trend chasers.", 'most_volatile': "Trend chasers."}, 'noise': {'moderate': "Low-impact traders.", 'volatile': "Random traders.", 'very_volatile': "High-impact traders.", 'most_volatile': "High-impact traders."} };
-        function showPopup(el, type) { const mode = document.getElementById('volatility-mode').value; popupTitle.innerText = type.toUpperCase(); popupDesc.innerText = definitions[type][mode] || "Standard behavior."; const rect = el.getBoundingClientRect(); popup.style.top = (rect.top - 10) + 'px'; popup.style.left = (rect.right + 10) + 'px'; popup.style.display = 'block'; }
+        
+        // POPUP & DEFINITIONS
+        const popup = document.getElementById('agent-popup'); const popupTitle = document.getElementById('popup-title'); const popupDesc = document.getElementById('popup-desc'); 
+        
+        const definitions = { 
+            'makers': {'moderate': "Provide liquidity with tight spreads (0.02%).", 'volatile': "Standard liquidity.", 'very_volatile': "High-frequency agents.", 'most_volatile': "High-frequency agents."}, 
+            'fundamental': {'moderate': "Value investors sensitive to small deviations.", 'volatile': "Standard investors.", 'very_volatile': "Aggressive takers.", 'most_volatile': "Aggressive takers."}, 
+            'momentum': {'moderate': "Scalpers reacting to tiny trends.", 'volatile': "Trend followers.", 'very_volatile': "Trend chasers.", 'most_volatile': "Trend chasers."}, 
+            'noise': {'moderate': "Low-impact random traders.", 'volatile': "Random traders.", 'very_volatile': "High-impact random traders.", 'most_volatile': "High-impact random traders."},
+            
+            // STATIC METRICS DEFINITIONS
+            'panic_meter': "Measures stress among short sellers. At 100%, they are forced to liquidate positions, causing a price explosion.",
+            'short_interest': "Total number of shares currently sold short by Fundamental traders. High values fuel a potential squeeze.",
+            'short_squeeze': "Scenario: Fundamental traders aggressively short. If price rises too high, they panic-buy to cover, creating a feedback loop.",
+            'pump_dump': "Scenario: Noise traders chase 'hype' aggressively. Fundamental traders provide weak resistance until the trend breaks, causing a crash.",
+            'hype_level': "The enthusiasm of Noise traders. High hype drives irrational buying. If price drops, hype collapses into panic selling.",
+            'overvalued': "Percentage by which current price exceeds the 'Fair Value' calculated by Fundamental traders.",
+            'sentiment': "Real-time activity per agent type. TOP: % of their volume that was BUY. BOTTOM: Net shares bought (+) or sold (-).",
+            'net_flow': "Total Net Volume (Buys - Sells) across all agents in the last tick. Green = Net Buying, Red = Net Selling."
+        };
+
+        function showPopup(el, type) { 
+            const mode = document.getElementById('volatility-mode').value; 
+            popupTitle.innerText = type.toUpperCase().replace('_', ' '); 
+            
+            // Handle both static strings and mode-dependent objects
+            if (typeof definitions[type] === 'string') {
+                popupDesc.innerText = definitions[type];
+            } else {
+                popupDesc.innerText = definitions[type][mode] || "Standard behavior."; 
+            }
+            
+            const rect = el.getBoundingClientRect(); 
+            popup.style.top = (rect.top - 10) + 'px'; 
+            popup.style.left = (rect.right + 10) + 'px'; 
+            popup.style.display = 'block'; 
+        }
         function hidePopup() { popup.style.display = 'none'; }
+        
         ['makers', 'fundamental', 'momentum', 'noise'].forEach(id => document.getElementById(`input-${id}`).addEventListener('input', e => document.getElementById(`val-${id}`).innerText = e.target.value));
-        document.getElementById('volatility-mode').addEventListener('change', e => { const scam = document.getElementById('scam-tools'); e.target.value.includes('volatile') ? scam.classList.remove('hidden') : scam.classList.add('hidden'); });
+        
+        // VISIBILITY LOGIC
+        document.getElementById('volatility-mode').addEventListener('change', e => { 
+            const isVolatile = e.target.value.includes('volatile');
+            const isVeryVolatile = (e.target.value === 'very_volatile');
+            const scam = document.getElementById('scam-tools');
+            const scenarios = document.getElementById('market-scenarios');
+            const liq = document.getElementById('liq-metrics');
+            
+            isVolatile ? scam.classList.remove('hidden') : scam.classList.add('hidden');
+            isVeryVolatile ? scenarios.classList.remove('hidden') : scenarios.classList.add('hidden');
+            isVeryVolatile ? liq.classList.remove('hidden') : liq.classList.add('hidden');
+            
+            if (!isVeryVolatile) setScenario('normal');
+        });
         document.getElementById('volatility-mode').dispatchEvent(new Event('change'));
+
+        // SCENARIO METRICS
+        socket.on('scenario_metrics', (d) => {
+            document.getElementById('val-hype').innerText = d.hype.toFixed(0) + '%';
+            document.getElementById('bar-hype').style.width = d.hype + '%';
+            document.getElementById('val-bubble').innerText = (d.bubble > 0 ? '+' : '') + d.bubble.toFixed(1) + '%';
+            document.getElementById('val-panic').innerText = d.panic.toFixed(0) + '%';
+            document.getElementById('bar-panic').style.width = d.panic + '%';
+            document.getElementById('val-short').innerText = d.short_interest.toLocaleString();
+        });
+
+        // GENERAL METRICS
+        socket.on('market_metrics', (d) => {
+            document.getElementById('val-spread').innerText = d.spread.toFixed(2);
+            document.getElementById('val-liq').innerText = d.liquidity.toLocaleString();
+        });
+
         function getColor(buyPct) { const r = Math.round(239 + (34 - 239) * buyPct), g = Math.round(68 + (197 - 68) * buyPct), b = Math.round(68 + (94 - 68) * buyPct); return `rgb(${r}, ${g}, ${b})`; }
         function updateCard(id, buy, sell) { const total = buy + sell, net = buy - sell, el = document.getElementById(id), valEl = el.querySelector('.sent-val'), netEl = el.querySelector('.sent-net'); if (total === 0) { el.style.backgroundColor = '#334155'; valEl.innerText = '0%'; netEl.innerText = '0'; return 0; } const buyPct = buy / total; el.style.backgroundColor = getColor(buyPct); valEl.innerText = Math.round(buyPct * 100) + '% BUY'; netEl.innerText = (net > 0 ? '+' : '') + net; return net; }
         socket.on('server_sentiment', (d) => { let t=0; t+=updateCard('card-fund',d[0],d[1]); t+=updateCard('card-mom',d[2],d[3]); t+=updateCard('card-make',d[4],d[5]); t+=updateCard('card-noise',d[6],d[7]); t+=(d[8]-d[9]); const el=document.getElementById('total-net-flow'); el.innerText=(t>0?'+':'')+t; el.className=t>0?"text-lg font-mono font-bold text-green-400":"text-lg font-mono font-bold text-red-400"; });
