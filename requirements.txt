@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+python-socketio
+pyzmq
+jinja2
+websockets
