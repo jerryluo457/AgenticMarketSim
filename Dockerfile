@@ -15,8 +15,8 @@ WORKDIR /app
 COPY . .
 
 # 3. Compile the C++ Simulation Engines
-# This runs the 'make all' command from your Makefile
-RUN make all
+# CHANGED: Use 'compile_all' instead of 'all' to avoid trying to start the server during build
+RUN make compile_all
 
 # 4. Install Python libraries
 RUN pip install --no-cache-dir -r requirements.txt
