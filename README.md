@@ -1,8 +1,8 @@
 
-# Agentic Market Simulator: Technical Specifications. 
+# Agentic Market Simulator: Technical Specifications
 Non-technical user guide after this section.
 
-[Online version hosted with render](http://agenticmarketsim.onrender.com)
+[Online version hosted with render](http://agenticmarketsim.onrender.com). May take some time to load up.
 
 ## Overview
 The Agentic Market Simulator is a high-performance, agent-based modeling system designed to simulate financial market microstructure and limit order book dynamics in real-time. The project visualizes the interactions between various autonomous trading agents and a human user, demonstrating phenomena such as liquidity crises, mean reversion, and momentum-driven volatility.

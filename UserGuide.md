@@ -1,7 +1,7 @@
-# Agentic Market Simulator: User Guide
+# Agentic Market Simulator: Non-technical User Guide
 
 ## Overview
-Welcome to the Agentic Market Simulator! This tool allows you to interact with a living, breathing financial market simulation populated by AI agents. You can watch the market evolve in real-time, trade against the AI, and trigger specific market events like "Pump & Dump" schemes or "Short Squeezes" to see how the market reacts.
+Welcome to the Agentic Market Simulator! This tool allows you to interact with a living, breathing financial market simulation populated by AI agents. You can watch the market evolve in real-time, trade against the AI, and trigger specific market events like "Pump & Dump" schemes or "Short Squeezes" to see how the market reacts. 
 
 **No coding knowledge is required to use this simulator.**
 
@@ -88,3 +88,5 @@ Hover over the **?** icons in the dashboard for quick definitions.
 ## Troubleshooting
 * **"Connection Error":** If the chart stops updating, click "Stop Sim" and then "Start Sim" again to reset the engine.
 * **Price Flatlining:** In scenarios like "Pump & Dump," the price might pause briefly as buyers chew through sell orders. This is normal market resistance—give it a second or use the Whale Tool to push it through!
+* **Pump & Dump price dipping at the start:**
+Note the "Pump & Dump" scenario currently contains some unexpected behavior. Please artificially pump the stock by making bulk purchases if this happens to "drive the hype" then see the stock price increase without any user action. However the "hype" has some randomness to it as natural agents (real-life people and algorithms) are not stupid and will not uniformly buy into the hype, which is why Pump & Dump is an extremely risky (and extremely illegal) strategy for perpetrators. 
