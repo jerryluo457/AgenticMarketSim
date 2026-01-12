@@ -29,8 +29,8 @@ The system is architected as a hybrid application: a high-speed C++ engine handl
 
 ## Flaws and Imperfections
 * **It is impossible to accurately model the market** I have modified, added, and removed many agents for the market simulation to "look natural". However, the real securities market has way more than 4 general types of agents, and each type of agents behave differently. The purpose of this simulation is to simulate user input's effects on general market behavior.
-* **Moderate and Volatile currently Beta:** Currently the agents demonstrate unexpected and unnatural behavior. 
-* **Momentum-centered trading inconsistency** 
+* **Moderate and Volatile currently Beta:** Currently the chart sometimes demonstrate unexpected and unnatural behavior due to the complexity of agent design. 
+* **Momentum-centered trading bipolarization** Currently the momentum traders either all buy or all sell, which is due to the uniform design of such agents for now. A more stochastic behavior of the momentum traders is currently being worked on.
 
 
 ## Installation and Usage
