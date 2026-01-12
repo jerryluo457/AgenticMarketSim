@@ -1,4 +1,5 @@
-# Agentic Market Simulator
+
+# Agentic Market Simulator: Technical Specifications
 
 ## Overview
 The Agentic Market Simulator is a high-performance, agent-based modeling system designed to simulate financial market microstructure and limit order book dynamics in real-time. The project visualizes the interactions between various autonomous trading agents and a human user, demonstrating phenomena such as liquidity crises, mean reversion, and momentum-driven volatility.
@@ -44,3 +45,5 @@ The system is architected as a hybrid application: a high-speed C++ engine handl
 Compile the simulation engines using the provided Makefile:
 ```bash
 make all
+
+[text](UserGuide.md)
