@@ -1,5 +1,6 @@
 
-# Agentic Market Simulator: Technical Specifications. Non-technical user guide below.
+# Agentic Market Simulator: Technical Specifications. 
+Non-technical user guide below.
 
 [Online version hosted with render](http://agenticmarketsim.onrender.com)
 
